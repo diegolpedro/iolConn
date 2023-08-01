@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+0.2
+---
+- Se eliminan archivos adicionales de login.
+- Adaptacion para uso como modulo.
+
 0.1
 ---
 - Versión Inicial.
