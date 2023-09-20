@@ -132,4 +132,4 @@ dmypy.json
 .secret
 .params
 .bearer
-pyproject.toml
+setup.old

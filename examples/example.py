@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #
-# iolConn es un conector python para la API Invertir Online - 
+# iolConn es un conector python para la API Invertir Online -
 # api.invertironline.com.ar
-# 
-# iolConn is an API connector for Invertir Online - 
+#
+# iolConn is an API connector for Invertir Online -
 # api.invertironline.com.ar
 #
 # Copyright (c) 2023 Diego L. Pedro <diegolpedro@gmail.com>.
@@ -20,8 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import iolConn
-import time
+from iolConn import Iol
 from getpass import getpass
 
 
@@ -37,6 +36,7 @@ def example_options(iol):
     # Descarga cotizaciones de opciones de Grupo Galicia
     json_res = iol.descargar('opciones', 'ggal')
     print(json_res)
+
 
 def example_panel(iol):
 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     user = input("Ingrese usuario: ")
     pwd = getpass("Ingrese password: ")
 
-    iol = iolConn.Iol(user, pwd)
+    iol = Iol(user, pwd)
     if iol.gestionar():
         exit()
 

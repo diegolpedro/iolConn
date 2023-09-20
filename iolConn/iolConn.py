@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #
-# iolConn es un conector python para la API Invertir Online - 
+# iolConn es un conector python para la API Invertir Online -
 # api.invertironline.com.ar
-# 
-# iolConn is an API connector for Invertir Online - 
+#
+# iolConn is an API connector for Invertir Online -
 # api.invertironline.com.ar
 #
 # Copyright (c) 2023 Diego L. Pedro <diegolpedro@gmail.com>.
@@ -20,10 +20,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-from datetime import datetime, date
+from datetime import datetime
 import json                         # Manejo de archivos json.
 import requests                     # Requests HTTP post y get.
 
+version = '0.3'
 
 # Variables de Iol
 # https://api.invertironline.com/Help
@@ -106,7 +107,7 @@ class Iol:
                 self.refresh_token = json_obj['refresh_token']
                 self.bearer_time = datetime.now()
                 return 0
-    
+
         print(req.status_code, req.text)
         return 1
 

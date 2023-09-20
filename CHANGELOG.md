@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+0.3
+---
+- Se corrige estructura del paquete.
+- Se incluye setuptools (pyproject + setup.cfg).
+
 0.2
 ---
 - Se eliminan archivos adicionales de login.
