@@ -23,8 +23,9 @@
 from datetime import datetime
 import json                         # Manejo de archivos json.
 import requests                     # Requests HTTP post y get.
+from common import NoDataException, NoAuthException
 
-version = '0.3'
+version = '0.4'
 
 # Variables de Iol
 # https://api.invertironline.com/Help
@@ -55,16 +56,13 @@ class Iol:
     # :type       url:      { type_description }
     def gestionar(self):
 
-        payload = '\"username\": \"' + self.user + '\", \"password\": \"' + \
-            self.password + '\", \"grant_type\": \"password\"'
         url = url_base + url_token
 
         if hasattr(self, 'bearer_time'):
 
             diferencia = (datetime.now() - self.bearer_time)
-            # datetime.now() - datetime.strptime(self.bearer_time, '%Y-%m-%d %H:%M:%S.%f'))
 
-            if int(diferencia.total_seconds() / 60) < 16:
+            if int(diferencia.total_seconds() / 60) < 15:
                 pass
                 return 0
 
@@ -72,44 +70,39 @@ class Iol:
                 print("Bearer vencido. Gestionando bearer refresh...")
 
                 # Se convierten en json.
-                payload = "{" + "\"refresh_token\": \""
-                + self.refresh_token
-                + "\", \"grant_type\": \"refresh_token\"" + "}"
-                valor = json.loads(payload)
-
-                # Se hace peticion de bearer token a IOL.
-                req = requests.post(url, data=valor)
-
-                # Interpretamos respuesta y guardamos los resultados.
-                if req.status_code == 200:
-                    json_obj = json.loads(req.text)
-
-                    self.bearer = json_obj['access_token']
-                    self.refresh_token = json_obj['refresh_token']
-                    self.bearer_time = datetime.now()
-                    return 0
+                payload = "\"refresh_token\": \"" + self.refresh_token + \
+                    "\", \"grant_type\": \"refresh_token\""
 
         else:
             print("Gestionando bearer...")
 
-            # Se convierten en json.
-            payload = "{" + payload + "}"
-            valor = json.loads(payload)
+            payload = '\"username\": \"' + self.user + \
+                '\", \"password\": \"' + self.password + \
+                '\", \"grant_type\": \"password\"'
 
-            # Se hace peticion de bearer token a IOL.
-            req = requests.post(url, data=valor)
+        # Se convierten en json.
+        payload = "{" + payload + "}"
 
-            # Interpretamos respuesta y guardamos los resultados.
-            if req.status_code == 200:
-                json_obj = json.loads(req.text)
+        valor = json.loads(payload)
 
-                self.bearer = json_obj['access_token']
-                self.refresh_token = json_obj['refresh_token']
-                self.bearer_time = datetime.now()
-                return 0
+        # Se hace peticion de bearer token a IOL.
+        req = requests.post(url, data=valor)
 
-        print(req.status_code, req.text)
-        return 1
+        # Interpretamos respuesta y guardamos los resultados.
+        if req.status_code == 200:
+            json_obj = json.loads(req.text)
+
+            self.bearer = json_obj['access_token']
+            self.refresh_token = json_obj['refresh_token']
+            self.bearer_time = datetime.now()
+            return 0
+        elif req.status_code == 401:
+            err = "Invalid user or password."
+            raise NoAuthException(err)
+        else:
+            err = "Error: " + str(req.status_code)
+
+        raise NoDataException(err)
 
     # Funcion: Descargar()
     #
@@ -120,7 +113,11 @@ class Iol:
     #                          bonos.
     # opciones              -> Obtenemos cotizaciones de las distintas bases
     #                          de opciones de un subyacente x.
+
     def descargar(self, solicitud, activo=None):
+
+        # Verifica bearer token
+        self.gestionar()
 
         print("Obteniendo: ", solicitud)
         print("Sobre: ", activo)
@@ -128,19 +125,15 @@ class Iol:
         # Chequeamos que queremos obtener
         if solicitud == "panelGeneralAcciones":
             url = url_base + url_cot_panel_acciones
-            req = requests.get(
-                url,
-                headers={"Authorization": "Bearer " + self.bearer})
         elif solicitud == "panelGeneralBonos":
             url = url_base + url_cot_panel_bonos
-            req = requests.get(
-                url,
-                headers={"Authorization": "Bearer " + self.bearer})
         elif solicitud == "opciones":
             url = url_base + url_cot_opciones[activo.upper()]
-            req = requests.get(
-                url,
-                headers={"Authorization": "Bearer " + self.bearer})
+
+        req = requests.get(
+            url,
+            headers={"Authorization": "Bearer " + self.bearer})
+
         return json.loads(req.text)
 
     # Descarga de ultima cotizacion
@@ -156,12 +149,27 @@ class Iol:
     # :rtype:     json object
     def price_to_json(self, mercado='bcba', simbolo=None):
 
+        # Verifica bearer token
+        self.gestionar()
+
         url = url_base + "api/v2/" +\
             mercado + "/Titulos/" + simbolo + "/Cotizacion"
+        # print(url)
+
         req = requests.get(
             url,
             headers={"Authorization": "Bearer " + self.bearer})
-        return json.loads(req.text)
+
+        # Interpretamos respuesta y guardamos los resultados.
+        if req.status_code == 200:
+            return json.loads(req.text)
+        elif req.status_code == 401:
+            err = "Invalid user or password."
+            raise NoAuthException(err)
+        else:
+            err = "Error: " + str(req.status_code)
+
+        raise NoDataException(err)
 
     # Descarga de valores temporales para periodo particular
     # :param      mercado:  Mercado
@@ -172,6 +180,9 @@ class Iol:
     # :rtype:     Json_object
     def hist_price_to_json(self, mercado='bcba', simbolo=None,
                            desde=None, hasta=None):
+
+        # Verifica bearer token
+        self.gestionar()
 
         url = url_base + "api/v2/" + mercado + "/Titulos/" + simbolo +\
             "/Cotizacion/seriehistorica/" + desde + "/" + hasta + "/ajustada"

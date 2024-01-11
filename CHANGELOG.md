@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+0.4
+---
+- Se implementan excepciones.
+- Se adiciona requerimiento faltante.
+- Se corrige bug con token refresh.
+- Se incorpora token refresh en todas las operaciones.
+
 0.3
 ---
 - Se corrige estructura del paquete.

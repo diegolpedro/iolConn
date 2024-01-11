@@ -129,7 +129,6 @@ dmypy.json
 .pyre/
 
 # Propios
-.secret
-.params
-.bearer
 setup.old
+
+example_local.py
