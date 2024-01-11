@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+0.4.2
+-----
+- Corrige error en import.
+
 0.4.1
 -----
 - Soluciona inconveniente con pypi.
