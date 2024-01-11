@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+0.4.1
+-----
+- Soluciona inconveniente con pypi.
+
 0.4
 ---
 - Se implementan excepciones.

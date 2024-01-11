@@ -1,7 +1,7 @@
 iolConn - Conector [Invertir Online® API](https://api.invertironline.com/)
 =====================================
 ![PyPI pyversions](https://img.shields.io/badge/python-3.7+-blue.svg?style=flat)
-[![PyPI version shields.io](https://img.shields.io/pypi/v/iolConn.svg)](https://pypi.org/project/iolConn/0.4/)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/iolConn.svg)](https://pypi.org/project/iolConn/0.4.1/)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/diegolpedro)
 [![Invitame un cafecito](https://cdn.cafecito.app/imgs/buttons/button_4.svg)](https://cafecito.app/diegolpedro)
 

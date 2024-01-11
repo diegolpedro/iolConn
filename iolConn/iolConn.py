@@ -25,7 +25,7 @@ import json                         # Manejo de archivos json.
 import requests                     # Requests HTTP post y get.
 from common import NoDataException, NoAuthException
 
-version = '0.4'
+version = '0.4.1'
 
 # Variables de Iol
 # https://api.invertironline.com/Help
